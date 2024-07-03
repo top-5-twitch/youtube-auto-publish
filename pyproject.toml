@@ -1,0 +1,23 @@
+[project]
+name = "auto-youtube"
+authors = [{name = "Lucas Gasque", email = "lucasfdg@hotmail.com"}]
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.12"
+dependencies = [
+    "selenium"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "ruff"
+]
+
+[project.urls]
+Homepage = "https://github.com/LucasGasque/auto-youtube"
+Issues = "https://github.com/LucasGasque/auto-youtube/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "auto_youtube.__version__"}
