@@ -1,41 +1,77 @@
+from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep, run
-from auto_youtube.web_browser import MakeBrowser
+
 from auto_youtube.config import settings
 
 
-class Main:
-    @staticmethod
-    async def run():
-        with MakeBrowser() as browser:
-            browser.get("https://youtube.com")
+class AutoYoutube:
+    def __init__(self, username, password) -> None:
+        self.__username = username
+        self.__password = password
+        self.__browser: Chrome
+        self.__options = ChromeOptions()
+        self.__wait: WebDriverWait
 
-            await sleep(3)
+    async def login(self) -> None:
+        self.__browser.get("https://youtube.com")
 
-            sign_in_button = browser.find_element(By.LINK_TEXT, "Fazer login")
-            sign_in_button.click()
+        sign_in_button = self.__wait.until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Fazer login"))
+        )
+        sign_in_button.click()
 
-            await sleep(3)
+        email_input = self.__wait.until(
+            EC.presence_of_element_located((By.ID, "identifierId"))
+        )
+        email_input.send_keys(self.__username)
 
-            email_input = browser.find_element(By.ID, "identifierId")
-            email_input.send_keys(settings.YOUTUBE_USERNAME)
+        next_button = self.__wait.until(
+            EC.element_to_be_clickable((By.ID, "identifierNext"))
+        )
+        next_button.click()
 
-            next_button = browser.find_element(By.ID, "identifierNext")
-            next_button.click()
+        password_input = self.__wait.until(
+            EC.presence_of_element_located((By.ID, "password"))
+        ).find_element(By.CSS_SELECTOR, "input")
+        password_input.send_keys(self.__password)
 
-            await sleep(3)
+        next_button_password = self.__wait.until(
+            EC.element_to_be_clickable((By.ID, "passwordNext"))
+        )
+        next_button_password.click()
 
-            password_input = browser.find_element(
-                By.CSS_SELECTOR, "input[type='password']"
-            )
-            password_input.send_keys(settings.YOUTUBE_PASSWORD)
+    async def post_video(self, video_path: str):
+        create_button = self.__wait.until(
+            EC.element_to_be_clickable((By.ID, "buttons"))
+        ).find_element(By.CSS_SELECTOR, "button")
+        create_button.click()
 
-            next_button = browser.find_element(By.ID, "passwordNext")
-            next_button.click()
+    async def post_description(self, video_description: str): ...
 
-            await sleep(10)
+    async def post_thumbnail(self, thumbnail_path: str): ...
+
+    def __enter__(self):
+        self.__options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        self.__options.add_experimental_option("useAutomationExtension", False)
+        self.__options.add_argument("--disable-blink-features=AutomationControlled")
+
+        self.__browser = Chrome(self.__options)
+        self.__wait = WebDriverWait(self.__browser, 10)
+        return self
+
+    def __exit__(self, _, __, ___):
+        self.__browser.quit()
 
 
-# browser.quit
+async def test():
+    with AutoYoutube(settings.YOUTUBE_USERNAME, settings.YOUTUBE_PASSWORD) as browser:
+        await browser.login()
+        await browser.post_video("path")
+        await sleep(10)
+
+
 if __name__ == "__main__":
-    run(Main.run())
+    run(test())
