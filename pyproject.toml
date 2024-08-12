@@ -5,7 +5,8 @@ readme = "README.md"
 dynamic = ["version"]
 requires-python = ">=3.12"
 dependencies = [
-    "selenium"
+    "selenium",
+    "pydantic-settings"
 ]
 
 [project.optional-dependencies]
