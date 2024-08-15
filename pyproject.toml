@@ -1,5 +1,5 @@
 [project]
-name = "auto-youtube"
+name = "youtube-auto-publish"
 authors = [{name = "Lucas Gasque", email = "lucasfdg@hotmail.com"}]
 readme = "README.md"
 dynamic = ["version"]
@@ -17,8 +17,8 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/LucasGasque/auto-youtube"
-Issues = "https://github.com/LucasGasque/auto-youtube/issues"
+Homepage = "https://github.com/LucasGasque/youtube-auto-publish"
+Issues = "https://github.com/LucasGasque/youtube-auto-publish/issues"
 
 [tool.setuptools.dynamic]
-version = {attr = "auto_youtube.__version__"}
+version = {attr = "youtube_auto_publish.__version__"}

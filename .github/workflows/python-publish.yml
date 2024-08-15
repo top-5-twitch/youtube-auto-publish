@@ -31,11 +31,11 @@ jobs:
         pip install build
     - name: Lint with ruff
       run: |
-        ruff check auto_youtube
+        ruff check youtube_auto_publish
         ruff check tests
     - name: Test with pytest
       run: |
-        pytest --cov=auto_youtube --cov-fail-under=100
+        pytest --cov=youtube_auto_publish --cov-fail-under=100
 
   deploy:
     runs-on: ubuntu-latest

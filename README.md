@@ -3,7 +3,7 @@
 
 ## How to run:
 ```
-from auto_youtube.config import settings
+from youtube_auto_publish.config import settings
 from asyncio import run
 
 async def test():
