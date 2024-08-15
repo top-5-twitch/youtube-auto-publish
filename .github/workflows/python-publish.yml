@@ -47,6 +47,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.12'
+    - name: Install build module
+      run: python -m pip install build
     - name: Build package
       run: python -m build
     - name: Publish package
