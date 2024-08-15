@@ -1,19 +1,19 @@
 import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
 from selenium.webdriver.support.ui import WebDriverWait
-from auto_youtube import AutoYoutube
+from youtube_auto_publish import AutoYoutube
 
 
 @pytest.fixture
-def auto_youtube():
-    auto_youtube = AutoYoutube("username", "password")
-    auto_youtube._AutoYoutube__browser = MagicMock()
-    auto_youtube._AutoYoutube__wait = MagicMock()
-    return auto_youtube
+def youtube_auto_publish():
+    youtube_auto_publish = AutoYoutube("username", "password")
+    youtube_auto_publish._AutoYoutube__browser = MagicMock()
+    youtube_auto_publish._AutoYoutube__wait = MagicMock()
+    return youtube_auto_publish
 
 
-@patch("auto_youtube.Chrome")
-@patch("auto_youtube.ChromeOptions")
+@patch("youtube_auto_publish.Chrome")
+@patch("youtube_auto_publish.ChromeOptions")
 def test_enter(options_mock, browser_mock):
     mock_options = options_mock.return_value
     mock_browser = browser_mock.return_value
@@ -32,7 +32,7 @@ def test_enter(options_mock, browser_mock):
         assert isinstance(context._AutoYoutube__wait, WebDriverWait)
 
 
-@patch("auto_youtube.Chrome")
+@patch("youtube_auto_publish.Chrome")
 def test_exit(chrome_mock):
     mock_browser = chrome_mock.return_value
 
@@ -45,8 +45,8 @@ def test_exit(chrome_mock):
 
 
 @pytest.mark.asyncio
-async def test_login(auto_youtube):
-    auto_youtube._AutoYoutube__wait.until.side_effect = [
+async def test_login(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__wait.until.side_effect = [
         MagicMock(),  # sign_in_button
         MagicMock(),  # email_input
         MagicMock(),  # next_button
@@ -54,59 +54,59 @@ async def test_login(auto_youtube):
         MagicMock(),  # next_button_password
     ]
 
-    with patch("auto_youtube.sleep", new_callable=AsyncMock):
-        await auto_youtube.login()
+    with patch("youtube_auto_publish.sleep", new_callable=AsyncMock):
+        await youtube_auto_publish.login()
 
-    assert auto_youtube._AutoYoutube__browser.get.called
-    assert auto_youtube._AutoYoutube__wait.until.called
-
-
-def test_post_thumbnail(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
-
-    auto_youtube._AutoYoutube__post_thumbnail("path/to/thumbnail")
-
-    assert auto_youtube._AutoYoutube__browser.find_element.called
+    assert youtube_auto_publish._AutoYoutube__browser.get.called
+    assert youtube_auto_publish._AutoYoutube__wait.until.called
 
 
-def test_post_tags(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
+def test_post_thumbnail(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
 
-    auto_youtube._AutoYoutube__post_tags(["tag1", "tag2"])
+    youtube_auto_publish._AutoYoutube__post_thumbnail("path/to/thumbnail")
 
-    assert auto_youtube._AutoYoutube__browser.find_element.called
-
-
-def test_mark_no_safe_for_kids(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
-
-    auto_youtube._AutoYoutube__mark_no_safe_for_kids()
-
-    assert auto_youtube._AutoYoutube__browser.find_element.called
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
 
 
-def test_mark_age_restricted(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
+def test_post_tags(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
 
-    auto_youtube._AutoYoutube__mark_age_restricted()
+    youtube_auto_publish._AutoYoutube__post_tags(["tag1", "tag2"])
 
-    assert auto_youtube._AutoYoutube__browser.find_element.called
-
-
-def test_go_to_publish_page(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
-
-    auto_youtube._AutoYoutube__go_to_publish_page()
-
-    assert auto_youtube._AutoYoutube__browser.find_element.called
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
 
 
-def test_select_publish_video(auto_youtube):
-    auto_youtube._AutoYoutube__browser.find_element.return_value = MagicMock()
+def test_mark_no_safe_for_kids(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
 
-    auto_youtube._AutoYoutube__select_publish_video()
+    youtube_auto_publish._AutoYoutube__mark_no_safe_for_kids()
 
-    assert auto_youtube._AutoYoutube__browser.find_element.called
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
+
+
+def test_mark_age_restricted(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
+
+    youtube_auto_publish._AutoYoutube__mark_age_restricted()
+
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
+
+
+def test_go_to_publish_page(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
+
+    youtube_auto_publish._AutoYoutube__go_to_publish_page()
+
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
+
+
+def test_select_publish_video(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__browser.find_element.return_value = MagicMock()
+
+    youtube_auto_publish._AutoYoutube__select_publish_video()
+
+    assert youtube_auto_publish._AutoYoutube__browser.find_element.called
 
 
 @pytest.mark.asyncio
@@ -122,7 +122,7 @@ async def test_post_video_success():
     instance._AutoYoutube__go_to_publish_page = MagicMock()
     instance._AutoYoutube__select_publish_video = MagicMock()
 
-    with patch("auto_youtube.sleep", new_callable=AsyncMock):
+    with patch("youtube_auto_publish.sleep", new_callable=AsyncMock):
         result = await instance.post_video(
             channel_name="Test Channel",
             video_path="path/to/video",
@@ -145,7 +145,7 @@ async def test_post_video_success_no_optional():
     instance._AutoYoutube__go_to_publish_page = MagicMock()
     instance._AutoYoutube__select_publish_video = MagicMock()
 
-    with patch("auto_youtube.sleep", new_callable=AsyncMock):
+    with patch("youtube_auto_publish.sleep", new_callable=AsyncMock):
         result = await instance.post_video(
             channel_name="Test Channel",
             video_path="path/to/video",
