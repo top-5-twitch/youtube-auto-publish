@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 class AutoYoutube:
@@ -190,6 +190,7 @@ class AutoYoutube:
         self.__options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.__options.add_experimental_option("useAutomationExtension", False)
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
+        self.__options.add_argument("--lang=pt-BR")
 
         self.__browser = Chrome(self.__options)
         self.__wait = WebDriverWait(self.__browser, 10)
