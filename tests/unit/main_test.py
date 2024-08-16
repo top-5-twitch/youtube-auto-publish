@@ -25,8 +25,11 @@ def test_enter(options_mock, browser_mock):
         mock_options.add_experimental_option.assert_any_call(
             "useAutomationExtension", False
         )
-        mock_options.add_argument.assert_called_with(
+        mock_options.add_argument.assert_any_call(
             "--disable-blink-features=AutomationControlled"
+        )
+        mock_options.add_argument.assert_any_call(
+            "--lang=pt-BR"
         )
         assert context._AutoYoutube__browser == mock_browser
         assert isinstance(context._AutoYoutube__wait, WebDriverWait)
