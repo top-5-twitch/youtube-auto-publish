@@ -20,9 +20,9 @@ async def test():
                 tags=["#overwatch","#pvp"],
                 age_restriction=True,
             )
-        numbers_of_trys += 1
+        numbers_of_tries += 1
 
-        if video_was_send or number_of_trys >= 5:
+        if video_was_send or number_of_tries >= 5:
             break
 
 
