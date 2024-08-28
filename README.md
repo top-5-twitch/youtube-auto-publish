@@ -8,10 +8,10 @@ from asyncio import run
 
 async def test():
     video_was_send: bool = False
-    number_or_trys: int = 0
+    number_or_tries: int = 0
 
     while not video_was_send:
-        with AutoYoutube("youtube_username", "youtube_password") as browser:
+        with AutoYoutube("youtube_username", "youtube_password", "chromedriver_executable_path") as browser:
             await browser.login()
             video_was_send = await browser.post_video(
                 channel_name="top5twitchDesenv",
@@ -20,9 +20,9 @@ async def test():
                 tags=["#overwatch","#pvp"],
                 age_restriction=True,
             )
-        numbers_of_tries += 1
+        number_or_tries += 1
 
-        if video_was_send or number_of_tries >= 5:
+        if video_was_send or number_or_tries >= 5:
             break
 
 
