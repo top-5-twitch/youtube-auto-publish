@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 
 class AutoYoutube:
@@ -13,9 +13,11 @@ class AutoYoutube:
         self,
         username: str,
         password: str,
+        chromedriver_executable_path: str = "",
     ) -> None:
         self.__username = username
         self.__password = password
+        self.__chromedriver_path = chromedriver_executable_path
         self.__browser: Chrome
         self.__options = ChromeOptions()
         self.__wait: WebDriverWait
@@ -192,7 +194,12 @@ class AutoYoutube:
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
         self.__options.add_argument("--lang=pt-BR")
 
-        self.__browser = Chrome(self.__options)
+        self.__browser = Chrome(
+            self.__options,
+            service=self.__chromedriver_path
+            if self.__chromedriver_path
+            else None,
+        )
         self.__wait = WebDriverWait(self.__browser, 10)
         return self
 
