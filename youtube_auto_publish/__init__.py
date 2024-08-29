@@ -1,11 +1,11 @@
-from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver import Chrome, ChromeOptions, ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 class AutoYoutube:
@@ -196,7 +196,7 @@ class AutoYoutube:
 
         self.__browser = Chrome(
             self.__options,
-            service=self.__chromedriver_path
+            service=ChromeService(executable_path=self.__chromedriver_path)
             if self.__chromedriver_path
             else None,
         )
