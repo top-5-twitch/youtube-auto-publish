@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 
 class AutoYoutube:
@@ -26,7 +26,7 @@ class AutoYoutube:
         self.__browser.get("https://youtube.com")
 
         sign_in_button = self.__wait.until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Fazer login"))
+            EC.element_to_be_clickable((By.LINK_TEXT, "Sign in"))
         )
         sign_in_button.click()
 
@@ -192,9 +192,8 @@ class AutoYoutube:
         self.__options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.__options.add_experimental_option("useAutomationExtension", False)
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
-        self.__options.add_argument("--lang=pt-BR")
+        self.__options.add_argument("--lang=en-US")
         self.__options.add_argument("--headless")
-        self.__options.add_argument("--no-sandbox")
         self.__options.add_argument("--disable-dev-shm-usage")
 
         self.__browser = Chrome(
