@@ -23,34 +23,39 @@ class AutoYoutube:
         self.__wait: WebDriverWait
 
     async def login(self) -> None:
-        self.__browser.get("https://youtube.com")
+        try:
+            self.__browser.get("https://youtube.com")
 
-        sign_in_button = self.__wait.until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Sign in"))
-        )
-        sign_in_button.click()
+            sign_in_button = self.__wait.until(
+                EC.element_to_be_clickable((By.LINK_TEXT, "Sign in"))
+            )
+            sign_in_button.click()
 
-        email_input = self.__wait.until(
-            EC.presence_of_element_located((By.ID, "identifierId"))
-        )
-        email_input.send_keys(self.__username)
+            email_input = self.__wait.until(
+                EC.presence_of_element_located((By.ID, "identifierId"))
+            )
+            email_input.send_keys(self.__username)
 
-        next_button = self.__wait.until(
-            EC.element_to_be_clickable((By.ID, "identifierNext"))
-        )
-        next_button.click()
+            next_button = self.__wait.until(
+                EC.element_to_be_clickable((By.ID, "identifierNext"))
+            )
+            next_button.click()
 
-        password_input = self.__wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#password input"))
-        )
-        password_input.send_keys(self.__password)
+            password_input = self.__wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#password input"))
+            )
+            password_input.send_keys(self.__password)
 
-        next_button_password = self.__wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#passwordNext button"))
-        )
+            next_button_password = self.__wait.until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "#passwordNext button")
+                )
+            )
 
-        await sleep(3)
-        next_button_password.click()
+            await sleep(3)
+            next_button_password.click()
+        except Exception:
+            print_exc()
 
     def __post_thumbnail(self, thumbnail_path: str) -> None:
         thumbnail_button = self.__browser.find_element(By.ID, "select-button")
@@ -191,11 +196,15 @@ class AutoYoutube:
     def __enter__(self):
         self.__options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.__options.add_experimental_option("useAutomationExtension", False)
+        self.__options.add_argument("--headless=new")
+        self.__options.add_argument("--no-sandbox")
+        self.__options.add_argument("--disable-dev-shm-usage")
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
         self.__options.add_argument("--lang=en-US")
-        self.__options.add_argument("--no-sandbox")
-        self.__options.add_argument("--headless")
-        self.__options.add_argument("--disable-dev-shm-usage")
+        self.__options.add_argument(
+            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+        )
+        #self.__options.binary_location = "/usr/bin/google-chrome"
 
         self.__browser = Chrome(
             self.__options,
