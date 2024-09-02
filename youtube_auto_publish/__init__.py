@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 
 class AutoYoutube:
@@ -41,8 +41,13 @@ class AutoYoutube:
             )
             next_button.click()
 
+            await sleep(5)
+
+            self.__browser.save_screenshot("screenshot.png")
             password_input = self.__wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "#password input"))
+                EC.visibility_of_element_located(
+                    (By.XPATH, "//input[@type='password']")
+                )
             )
             password_input.send_keys(self.__password)
 
@@ -54,8 +59,10 @@ class AutoYoutube:
 
             await sleep(3)
             next_button_password.click()
-        except Exception:
+        except Exception as e:
             print_exc()
+
+            raise e
 
     def __post_thumbnail(self, thumbnail_path: str) -> None:
         thumbnail_button = self.__browser.find_element(By.ID, "select-button")
@@ -187,6 +194,8 @@ class AutoYoutube:
 
             publish_button.click()
 
+            await sleep(10)
+
             return True
         except Exception:
             print_exc()
@@ -202,9 +211,9 @@ class AutoYoutube:
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
         self.__options.add_argument("--lang=en-US")
         self.__options.add_argument(
-            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
         )
-        #self.__options.binary_location = "/usr/bin/google-chrome"
+        self.__options.binary_location = "/usr/bin/google-chrome"
 
         self.__browser = Chrome(
             self.__options,
