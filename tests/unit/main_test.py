@@ -28,9 +28,7 @@ def test_enter(options_mock, browser_mock):
         mock_options.add_argument.assert_any_call(
             "--disable-blink-features=AutomationControlled"
         )
-        mock_options.add_argument.assert_any_call(
-            "--lang=en-US"
-        )
+        mock_options.add_argument.assert_any_call("--lang=en-US")
         assert context._AutoYoutube__browser == mock_browser
         assert isinstance(context._AutoYoutube__wait, WebDriverWait)
 
@@ -62,6 +60,16 @@ async def test_login(youtube_auto_publish):
 
     assert youtube_auto_publish._AutoYoutube__browser.get.called
     assert youtube_auto_publish._AutoYoutube__wait.until.called
+
+
+@pytest.mark.asyncio
+async def test_login_exception(youtube_auto_publish):
+    youtube_auto_publish._AutoYoutube__wait.until.side_effect = [
+        Exception(),  # sign_in_button
+    ]
+
+    with pytest.raises(Exception):
+        await youtube_auto_publish.login()
 
 
 def test_post_thumbnail(youtube_auto_publish):

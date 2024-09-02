@@ -1,0 +1,9 @@
+services:
+  top5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "4444:4444"
