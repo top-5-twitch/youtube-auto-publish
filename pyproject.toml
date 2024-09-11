@@ -20,5 +20,9 @@ test = [
 Homepage = "https://github.com/top-5-twitch/youtube-auto-publish"
 Issues = "https://github.com/top-5-twitch/youtube-auto-publish/issues"
 
+
+[tool.setuptools]
+packages = ["youtube_auto_publish"]
+
 [tool.setuptools.dynamic]
 version = {attr = "youtube_auto_publish.__version__"}
