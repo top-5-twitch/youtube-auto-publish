@@ -4,8 +4,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from asyncio import sleep
 from traceback import print_exc
+from logging import getLogger
 
-__version__ = "0.0.8"
+logger = getLogger(__name__)
+
+__version__ = "0.0.1"
 
 
 class AutoYoutube:
@@ -24,6 +27,7 @@ class AutoYoutube:
 
     async def login(self) -> None:
         try:
+            logger.info("Connecting to Youtube")
             self.__browser.get("https://youtube.com")
 
             sign_in_button = self.__wait.until(
@@ -31,6 +35,7 @@ class AutoYoutube:
             )
             sign_in_button.click()
 
+            logger.info("Sending Username")
             email_input = self.__wait.until(
                 EC.presence_of_element_located((By.ID, "identifierId"))
             )
@@ -41,9 +46,7 @@ class AutoYoutube:
             )
             next_button.click()
 
-            await sleep(5)
-
-            self.__browser.save_screenshot("screenshot.png")
+            logger.info("Sending Password")
             password_input = self.__wait.until(
                 EC.visibility_of_element_located(
                     (By.XPATH, "//input[@type='password']")
@@ -101,23 +104,24 @@ class AutoYoutube:
         age_restriction_button.click()
 
     def __go_to_publish_page(self) -> None:
-        next_button = self.__browser.find_element(By.ID, "next-button").find_element(
+        self.__browser.save_screenshot("/app/pics/screenshot.png")
+        next_button_1 = self.__browser.find_element(By.ID, "next-button").find_element(
             By.CSS_SELECTOR, "button"
         )
 
-        next_button.click()
+        next_button_1.click()
 
-        next_button = self.__browser.find_element(By.ID, "next-button").find_element(
+        next_button_2 = self.__browser.find_element(By.ID, "next-button").find_element(
             By.CSS_SELECTOR, "button"
         )
 
-        next_button.click()
+        next_button_2.click()
 
-        next_button = self.__browser.find_element(By.ID, "next-button").find_element(
+        next_button_3 = self.__browser.find_element(By.ID, "next-button").find_element(
             By.CSS_SELECTOR, "button"
         )
 
-        next_button.click()
+        next_button_3.click()
 
     def __select_publish_video(self) -> None:
         public_button = self.__browser.find_element(
@@ -136,6 +140,7 @@ class AutoYoutube:
         age_restriction: bool = False,
     ) -> bool:
         try:
+            logger.info("Selecting channel")
             channel_button = self.__wait.until(
                 EC.presence_of_element_located(
                     (By.XPATH, f"//*[@id='channel-title' and text()='{channel_name}']")
@@ -145,6 +150,7 @@ class AutoYoutube:
 
             await sleep(3)
 
+            logger.info("Uploading video")
             create_button = self.__wait.until(
                 EC.element_to_be_clickable((By.XPATH, "//button[@aria-label='Create']"))
             )
@@ -165,6 +171,7 @@ class AutoYoutube:
 
             await sleep(3)
 
+            logger.info("")
             description_box = self.__wait.until(
                 EC.presence_of_element_located((By.ID, "description-wrapper"))
             ).find_element(By.ID, "textbox")
@@ -211,7 +218,7 @@ class AutoYoutube:
         self.__options.add_argument("--disable-blink-features=AutomationControlled")
         self.__options.add_argument("--lang=en-US")
         self.__options.add_argument(
-            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.119 Safari/537.36"
         )
         self.__options.binary_location = "/usr/bin/google-chrome"
 
@@ -221,6 +228,7 @@ class AutoYoutube:
             if self.__chromedriver_path
             else None,
         )
+        self.__browser.maximize_window()
         self.__wait = WebDriverWait(self.__browser, 10)
         return self
 
