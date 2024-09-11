@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-RUN mkdir /pics
+#RUN mkdir /pics
 
 COPY requirements.txt .
 

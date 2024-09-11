@@ -8,7 +8,7 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 class AutoYoutube:
@@ -104,7 +104,6 @@ class AutoYoutube:
         age_restriction_button.click()
 
     def __go_to_publish_page(self) -> None:
-        self.__browser.save_screenshot("/app/pics/screenshot.png")
         next_button_1 = self.__browser.find_element(By.ID, "next-button").find_element(
             By.CSS_SELECTOR, "button"
         )
