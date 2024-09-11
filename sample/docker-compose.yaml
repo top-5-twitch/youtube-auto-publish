@@ -1,0 +1,13 @@
+services:
+  top5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "C:\\Users\\lucas\\Downloads:/mnt/downloads"
+      - "C:\\Users\\lucas\\Downloads:/app/pics"
+    env_file:
+      - .env
+    ports:
+      - "4444:4444"
+      - "5900:5900"

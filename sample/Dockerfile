@@ -1,4 +1,4 @@
-FROM selenium/standalone-chrome:127.0
+FROM selenium/standalone-chrome:128.0
 
 USER root
 
@@ -11,13 +11,15 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+RUN mkdir /pics
+
 COPY requirements.txt .
 
 COPY youtube_auto_publish ./youtube_auto_publish
 
-COPY test.py .
+COPY run.py .
 
 RUN python3.12 -m venv /app/venv && \
     /app/venv/bin/pip install -r requirements.txt
 
-CMD ["sh", "-c",". /app/venv/bin/activate && python test.py"]
+CMD ["sh", "-c",". /app/venv/bin/activate && python run.py"]
