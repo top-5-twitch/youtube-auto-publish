@@ -9,7 +9,6 @@ async def test():
         with AutoYoutube(
             os.environ["YOUTUBE_USERNAME"],
             os.environ["YOUTUBE_PASSWORD"],
-            "/usr/bin/chromedriver",
         ) as browser:
             await browser.login()
             await browser.post_video(

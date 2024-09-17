@@ -16,11 +16,9 @@ class AutoYoutube:
         self,
         username: str,
         password: str,
-        chromedriver_executable_path: str = "",
     ) -> None:
         self.__username = username
         self.__password = password
-        self.__chromedriver_path = chromedriver_executable_path
         self.__browser: Chrome
         self.__options = ChromeOptions()
         self.__wait: WebDriverWait
@@ -228,9 +226,7 @@ class AutoYoutube:
 
             self.__browser = Chrome(
                 self.__options,
-                service=ChromeService(executable_path=self.__chromedriver_path)
-                if self.__chromedriver_path
-                else None,
+                service=ChromeService(executable_path="/usr/bin/chromedriver"),
             )
             self.__browser.maximize_window()
             self.__wait = WebDriverWait(self.__browser, 10)

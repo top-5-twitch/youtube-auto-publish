@@ -33,6 +33,14 @@ def test_enter(options_mock, browser_mock):
         assert isinstance(context._AutoYoutube__wait, WebDriverWait)
 
 
+@patch("youtube_auto_publish.Chrome", side_effect=Exception)
+@patch("youtube_auto_publish.ChromeOptions")
+def test_enter_exception(options_mock, browser_mock):
+    with pytest.raises(Exception):
+        with AutoYoutube("username", "password"):
+            ...
+
+
 @patch("youtube_auto_publish.Chrome")
 def test_exit(chrome_mock):
     mock_browser = chrome_mock.return_value
@@ -68,7 +76,9 @@ async def test_login_exception(youtube_auto_publish):
         Exception(),  # sign_in_button
     ]
 
-    with pytest.raises(Exception):
+    with pytest.raises(Exception), patch(
+        "youtube_auto_publish.sleep", new_callable=AsyncMock
+    ):
         await youtube_auto_publish.login()
 
 
