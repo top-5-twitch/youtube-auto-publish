@@ -6,15 +6,11 @@ from youtube_auto_publish import AutoYoutube
 
 async def test():
     try:
-        print("começãndo")
         with AutoYoutube(
             os.environ["YOUTUBE_USERNAME"],
             os.environ["YOUTUBE_PASSWORD"],
-            "/usr/bin/chromedriver",
         ) as browser:
-            print("Login")
             await browser.login()
-            print("enviando")
             await browser.post_video(
                 channel_name="top5twitchDesenv",
                 video_path="/mnt/downloads/final video.mp4",
