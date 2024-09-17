@@ -27,6 +27,8 @@ class AutoYoutube:
 
     async def login(self) -> None:
         try:
+            await sleep(5)
+
             logger.info("Connecting to Youtube")
             self.__browser.get("https://youtube.com")
 
@@ -209,27 +211,35 @@ class AutoYoutube:
             return False
 
     def __enter__(self):
-        self.__options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        self.__options.add_experimental_option("useAutomationExtension", False)
-        self.__options.add_argument("--headless=new")
-        self.__options.add_argument("--no-sandbox")
-        self.__options.add_argument("--disable-dev-shm-usage")
-        self.__options.add_argument("--disable-blink-features=AutomationControlled")
-        self.__options.add_argument("--lang=en-US")
-        self.__options.add_argument(
-            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.119 Safari/537.36"
-        )
-        self.__options.binary_location = "/usr/bin/google-chrome"
+        try:
+            self.__options.add_experimental_option(
+                "excludeSwitches", ["enable-automation"]
+            )
+            self.__options.add_experimental_option("useAutomationExtension", False)
+            self.__options.add_argument("--headless=new")
+            self.__options.add_argument("--no-sandbox")
+            self.__options.add_argument("--disable-dev-shm-usage")
+            self.__options.add_argument("--disable-blink-features=AutomationControlled")
+            self.__options.add_argument("--lang=en-US")
+            self.__options.add_argument(
+                "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.119 Safari/537.36"
+            )
+            self.__options.binary_location = "/usr/bin/chromium"
 
-        self.__browser = Chrome(
-            self.__options,
-            service=ChromeService(executable_path=self.__chromedriver_path)
-            if self.__chromedriver_path
-            else None,
-        )
-        self.__browser.maximize_window()
-        self.__wait = WebDriverWait(self.__browser, 10)
-        return self
+            self.__browser = Chrome(
+                self.__options,
+                service=ChromeService(executable_path=self.__chromedriver_path)
+                if self.__chromedriver_path
+                else None,
+            )
+            self.__browser.maximize_window()
+            self.__wait = WebDriverWait(self.__browser, 10)
+            return self
+
+        except Exception as e:
+            print_exc()
+
+            raise e
 
     def __exit__(self, *args):
         self.__browser.quit()

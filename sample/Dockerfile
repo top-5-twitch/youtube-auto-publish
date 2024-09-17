@@ -1,4 +1,4 @@
-FROM selenium/standalone-chrome:128.0
+FROM selenium/standalone-chromium:128.0
 
 USER root
 
