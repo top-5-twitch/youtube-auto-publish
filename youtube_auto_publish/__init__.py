@@ -8,7 +8,7 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 
 class AutoYoutube:
@@ -170,7 +170,6 @@ class AutoYoutube:
 
             await sleep(3)
 
-            logger.info("")
             description_box = self.__wait.until(
                 EC.presence_of_element_located((By.ID, "description-wrapper"))
             ).find_element(By.ID, "textbox")
@@ -210,10 +209,8 @@ class AutoYoutube:
 
     def __enter__(self):
         try:
-            self.__options.add_experimental_option(
-                "excludeSwitches", ["enable-automation"]
-            )
-            self.__options.add_experimental_option("useAutomationExtension", False)
+            logger.info("Starting driver.")
+
             self.__options.add_argument("--headless=new")
             self.__options.add_argument("--no-sandbox")
             self.__options.add_argument("--disable-dev-shm-usage")
@@ -225,11 +222,14 @@ class AutoYoutube:
             self.__options.binary_location = "/usr/bin/chromium"
 
             self.__browser = Chrome(
-                self.__options,
+                options=self.__options,
                 service=ChromeService(executable_path="/usr/bin/chromedriver"),
             )
             self.__browser.maximize_window()
             self.__wait = WebDriverWait(self.__browser, 10)
+
+            logger.info("Driver started.")
+
             return self
 
         except Exception as e:
