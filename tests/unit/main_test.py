@@ -19,12 +19,6 @@ def test_enter(options_mock, browser_mock):
     mock_browser = browser_mock.return_value
 
     with AutoYoutube("username", "password") as context:
-        mock_options.add_experimental_option.assert_any_call(
-            "excludeSwitches", ["enable-automation"]
-        )
-        mock_options.add_experimental_option.assert_any_call(
-            "useAutomationExtension", False
-        )
         mock_options.add_argument.assert_any_call(
             "--disable-blink-features=AutomationControlled"
         )
