@@ -20,6 +20,8 @@ async def test():
             age_restriction=True,
         )
 
+    return True
+
 
 if __name__ == "__main__":
     run(test())
