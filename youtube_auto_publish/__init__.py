@@ -2,13 +2,14 @@ from selenium.webdriver import Chrome, ChromeOptions, ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from asyncio import sleep
 from traceback import print_exc
 from logging import getLogger
 
 logger = getLogger(__name__)
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 
 class AutoYoutube:
@@ -25,8 +26,6 @@ class AutoYoutube:
 
     async def login(self) -> None:
         try:
-            await sleep(5)
-
             logger.info("Connecting to Youtube")
             self.__browser.get("https://youtube.com")
 
@@ -209,8 +208,7 @@ class AutoYoutube:
 
     def __enter__(self):
         try:
-            logger.info("Starting driver.")
-
+            logger.info("Setting options for driver.")
             self.__options.add_argument("--headless=new")
             self.__options.add_argument("--no-sandbox")
             self.__options.add_argument("--disable-dev-shm-usage")
@@ -221,16 +219,25 @@ class AutoYoutube:
             )
             self.__options.binary_location = "/usr/bin/chromium"
 
-            self.__browser = Chrome(
-                options=self.__options,
-                service=ChromeService(executable_path="/usr/bin/chromedriver"),
-            )
+            logger.info("Starting driver.")
+            self.__browser = WebDriverWait(
+                Chrome(
+                    options=self.__options,
+                    service=ChromeService(executable_path="/usr/bin/chromedriver"),
+                ),
+                10,
+            ).until(lambda driver: driver)
+            logger.info("Driver started.")
+
             self.__browser.maximize_window()
             self.__wait = WebDriverWait(self.__browser, 10)
 
-            logger.info("Driver started.")
-
             return self
+
+        except TimeoutException as e:
+            print_exc()
+
+            raise e
 
         except Exception as e:
             print_exc()

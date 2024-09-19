@@ -1,7 +1,7 @@
 services:
   top5:
     build:
-      context: .
+      context: ./sample
       dockerfile: Dockerfile
     volumes:
       - "C:\\Users\\lucas\\Downloads:/mnt/downloads"
@@ -11,4 +11,4 @@ services:
     ports:
       - "4444:4444"
       - "5900:5900"
-    restart: always
+    restart: on-failure

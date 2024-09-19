@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from youtube_auto_publish import AutoYoutube
 
 
@@ -17,20 +18,28 @@ def youtube_auto_publish():
 def test_enter(options_mock, browser_mock):
     mock_options = options_mock.return_value
     mock_browser = browser_mock.return_value
-
-    with AutoYoutube("username", "password") as context:
-        mock_options.add_argument.assert_any_call(
-            "--disable-blink-features=AutomationControlled"
-        )
-        mock_options.add_argument.assert_any_call("--lang=en-US")
-        assert context._AutoYoutube__browser == mock_browser
-        assert isinstance(context._AutoYoutube__wait, WebDriverWait)
+    with patch("youtube_auto_publish.sleep", new_callable=AsyncMock):
+        with AutoYoutube("username", "password") as context:
+            mock_options.add_argument.assert_any_call(
+                "--disable-blink-features=AutomationControlled"
+            )
+            mock_options.add_argument.assert_any_call("--lang=en-US")
+            assert context._AutoYoutube__browser == mock_browser
+            assert isinstance(context._AutoYoutube__wait, WebDriverWait)
 
 
 @patch("youtube_auto_publish.Chrome", side_effect=Exception)
 @patch("youtube_auto_publish.ChromeOptions")
 def test_enter_exception(options_mock, browser_mock):
     with pytest.raises(Exception):
+        with AutoYoutube("username", "password"):
+            ...
+
+
+@patch("youtube_auto_publish.Chrome", side_effect=TimeoutException)
+@patch("youtube_auto_publish.ChromeOptions")
+def test_enter_timeout_exception(options_mock, browser_mock):
+    with pytest.raises(TimeoutException):
         with AutoYoutube("username", "password"):
             ...
 
