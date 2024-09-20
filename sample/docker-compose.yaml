@@ -1,7 +1,7 @@
 services:
   top5:
     build:
-      context: ./sample
+      context: .
       dockerfile: Dockerfile
     volumes:
       - "C:\\Users\\lucas\\Downloads:/mnt/downloads"

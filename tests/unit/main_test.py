@@ -56,6 +56,18 @@ def test_exit(chrome_mock):
     mock_browser.quit.assert_called_once()
 
 
+@patch("youtube_auto_publish.Chrome")
+def test_exit_no_browser(chrome_mock):
+    mock_browser = chrome_mock.return_value
+
+    context = AutoYoutube("username", "password")
+    context._AutoYoutube__browser = None
+
+    context.__exit__()
+
+    mock_browser.quit.assert_not_called()
+
+
 @pytest.mark.asyncio
 async def test_login(youtube_auto_publish):
     youtube_auto_publish._AutoYoutube__wait.until.side_effect = [

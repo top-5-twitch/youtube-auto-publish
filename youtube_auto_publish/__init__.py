@@ -9,7 +9,7 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 
 class AutoYoutube:
@@ -211,6 +211,8 @@ class AutoYoutube:
             logger.info("Setting options for driver.")
             self.__options.add_argument("--headless=new")
             self.__options.add_argument("--no-sandbox")
+            self.__options.add_argument("--remote-debugging-port=4444")
+            self.__options.add_argument("--disable-gpu")
             self.__options.add_argument("--disable-dev-shm-usage")
             self.__options.add_argument("--disable-blink-features=AutomationControlled")
             self.__options.add_argument("--lang=en-US")
@@ -245,4 +247,5 @@ class AutoYoutube:
             raise e
 
     def __exit__(self, *args):
-        self.__browser.quit()
+        if self.__browser:
+            self.__browser.quit()
